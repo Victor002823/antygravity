@@ -60,8 +60,8 @@ export default function Home() {
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                 <ShieldCheck size={32} />
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-800">Garantía Extendida</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Todos nuestros equipos cuentan con póliza de garantía directa de hasta 5 años por defectos de fábrica.</p>
+              <h3 className="text-xl font-semibold mb-3 text-gray-800">Garantía Elite</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Todos nuestros equipos cuentan con póliza de garantía directa de hasta 1 años por defectos de fábrica.</p>
             </div>
             
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
