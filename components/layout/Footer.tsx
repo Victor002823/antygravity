@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <div className="text-2xl font-bold font-display tracking-tight text-white flex items-center gap-2">
-                <span className="text-primary">ANTI</span>GRAVITY
+                <span className="text-primary">Elite Titan</span>Culinary
               </div>
             </Link>
             <p className="text-gray-400 text-sm mb-6">
