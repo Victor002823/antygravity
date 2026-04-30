@@ -11,7 +11,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const links = [
-    { name: 'Inici', path: '/' },
+    { name: 'Inicio', path: '/' },
     { name: 'Nosotros', path: '/nosotros' },
     { name: 'Catálogo', path: '/catalogo' },
     { name: 'Servicios', path: '/servicios' },
