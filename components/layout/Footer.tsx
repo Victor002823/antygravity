@@ -111,7 +111,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm text-center md:text-left">
-            &copy; {new Date().getFullYear()} Antigravity. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()}Elite Titan Culinary. Todos los derechos reservados.
           </p>
           <div className="flex gap-6">
             <Link href="/privacidad" className="text-gray-500 hover:text-white transition-colors text-sm">
