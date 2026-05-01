@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 
 export default function Admin() {
   const [form, setForm] = useState({
@@ -12,9 +12,12 @@ export default function Admin() {
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (e.target.name === 'image') {
-      setForm({ ...form, image: e.target.files[0] });
+      const fileInput = e.target as HTMLInputElement;
+      setForm({ ...form, image: fileInput.files?.[0] || null });
     } else {
       setForm({ ...form, [e.target.name]: e.target.value });
     }
@@ -26,7 +29,6 @@ export default function Admin() {
     setLoading(true);
 
     try {
-      // 1️⃣ Subir imagen a R2
       const fd = new FormData();
       fd.append('file', form.image);
 
@@ -37,80 +39,54 @@ export default function Admin() {
 
       const uploadData = await uploadRes.json();
 
-      if (!uploadData.success) {
-        throw new Error('Error subiendo imagen');
-      }
+      if (!uploadData.success) throw new Error('Upload failed');
 
-      // 2️⃣ Guardar producto en MySQL
-      const saveRes = await fetch('https://api.mudanzasellince.com/create-product.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          category: form.category,
-          description: form.description,
-          image_url: uploadData.url,
-        }),
-      });
+      const saveRes = await fetch(
+        'https://api.mudanzasellince.com/create-product.php',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name,
+            category: form.category,
+            description: form.description,
+            image_url: uploadData.url,
+          }),
+        }
+      );
 
       const saveData = await saveRes.json();
 
-      if (saveData.success) {
-        alert('Producto guardado 🚀');
-        setForm({ name: '', category: '', description: '', image: null });
-      } else {
-        throw new Error(saveData.error);
-      }
+      if (!saveData.success) throw new Error('DB error');
+
+      alert('Producto guardado 🚀');
 
     } catch (err) {
       console.error(err);
-      alert('Error en el proceso');
+      alert('Error');
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-10">
-      <h1 className="text-3xl font-bold mb-6">Panel Admin</h1>
+    <div style={{ padding: 40 }}>
+      <h1>Panel Admin</h1>
 
-      <input
-        name="name"
-        placeholder="Nombre"
-        className="border p-2 w-full mb-4"
-        value={form.name}
-        onChange={handleChange}
-      />
+      <input name="name" placeholder="Nombre" onChange={handleChange} />
+      <br /><br />
 
-      <input
-        name="category"
-        placeholder="Categoría"
-        className="border p-2 w-full mb-4"
-        value={form.category}
-        onChange={handleChange}
-      />
+      <input name="category" placeholder="Categoría" onChange={handleChange} />
+      <br /><br />
 
-      <textarea
-        name="description"
-        placeholder="Descripción"
-        className="border p-2 w-full mb-4"
-        value={form.description}
-        onChange={handleChange}
-      />
+      <textarea name="description" placeholder="Descripción" onChange={handleChange}></textarea>
+      <br /><br />
 
-      <input
-        type="file"
-        name="image"
-        className="mb-4"
-        onChange={handleChange}
-      />
+      <input type="file" name="image" onChange={handleChange} />
+      <br /><br />
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="bg-black text-white px-6 py-2 rounded"
-      >
-        {loading ? 'Guardando...' : 'Guardar Producto'}
+      <button onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Guardando...' : 'Guardar'}
       </button>
     </div>
   );
