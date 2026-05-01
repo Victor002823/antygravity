@@ -1,24 +1,52 @@
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { NextResponse } from "next/server";
+
+const r2 = new S3Client({
+  region: "auto",
+  endpoint: process.env.R2_ENDPOINT!,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+  },
+});
+
 export async function POST(req: Request) {
   try {
-    console.log("UPLOAD HIT");
-
     const formData = await req.formData();
     const file = formData.get("file");
 
     if (!file) {
-      return Response.json({ ok: false, error: "no file" });
+      return NextResponse.json({ error: "No file" }, { status: 400 });
     }
 
-    return Response.json({
-      ok: true,
-      received: true,
-      type: typeof file
-    });
+    const fileData = file as Blob;
+    const buffer = Buffer.from(await fileData.arrayBuffer());
 
-  } catch (e) {
-    return Response.json({
-      ok: false,
-      error: String(e)
+    const key = `products/${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(7)}.jpg`;
+
+    await r2.send(
+      new PutObjectCommand({
+        Bucket: process.env.R2_BUCKET!,
+        Key: key,
+        Body: buffer,
+        ContentType: "image/jpeg",
+      })
+    );
+
+    const url = `${process.env.R2_PUBLIC_URL}/${key}`;
+
+    return NextResponse.json({
+      success: true,
+      url,
     });
+  } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+
+    return NextResponse.json(
+      { error: "UPLOAD_FAILED", detail: String(error) },
+      { status: 500 }
+    );
   }
 }
