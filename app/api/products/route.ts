@@ -1,31 +1,45 @@
 import { NextResponse } from "next/server";
+import mysql from "mysql2/promise";
 
-let products = [
-  {
-    id: "1",
-    name: "Empacadora al Vacío",
-    category: "empaque",
-    desc: "Sellado hermético",
-    img: "https://images.example.com/1.webp",
-  },
-];
+const db = await mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
 
+
+// 📥 GET → obtener productos
 export async function GET() {
-  return NextResponse.json({ success: true, data: products });
+  try {
+    const [rows] = await db.execute("SELECT * FROM products ORDER BY id DESC");
+
+    return NextResponse.json(rows);
+  } catch (error) {
+    return NextResponse.json({ error: "DB_ERROR" }, { status: 500 });
+  }
 }
 
+
+// 📤 POST → crear producto
 export async function POST(req: Request) {
-  const body = await req.json();
+  try {
+    const body = await req.json();
 
-  const newProduct = {
-    id: Date.now().toString(),
-    ...body,
-  };
+    const { name, category, description, image } = body;
 
-  products.push(newProduct);
+    if (!name || !image) {
+      return NextResponse.json({ error: "MISSING_FIELDS" }, { status: 400 });
+    }
 
-  return NextResponse.json({
-    success: true,
-    data: newProduct,
-  });
+    await db.execute(
+      "INSERT INTO products (name, category, description, image) VALUES (?, ?, ?, ?)",
+      [name, category, description, image]
+    );
+
+    return NextResponse.json({ success: true });
+
+  } catch (error) {
+    return NextResponse.json({ error: "CREATE_FAILED" }, { status: 500 });
+  }
 }
