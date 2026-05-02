@@ -19,28 +19,34 @@ export default function Admin() {
   const [editing, setEditing] = useState<any | null>(null);
 
   // =========================
-  // 🔐 AUTH CHECK
+  // 🔐 AUTH CHECK (SAFE)
   // =========================
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      if (!document.cookie.includes('token')) {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
         router.push('/login');
       }
     }
   }, []);
 
   // =========================
-  // 📦 LOAD PRODUCTS (SAFE)
+  // 📦 LOAD PRODUCTS (FIXED AUTH)
   // =========================
   const loadProducts = async () => {
     try {
+      const token = localStorage.getItem('token');
+
       const res = await fetch('https://api.mudanzasellince.com/products.php', {
-        credentials: 'include',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await res.json();
 
-      // 🔥 VALIDACIÓN ROBUSTA
       if (data?.data && Array.isArray(data.data)) {
         setProducts(data.data);
       } else {
@@ -74,10 +80,14 @@ export default function Admin() {
 
       const uploadData = await upload.json();
 
+      const token = localStorage.getItem('token');
+
       await fetch('https://api.mudanzasellince.com/create-product.php', {
         method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           name: form.name,
           category: form.category,
@@ -99,10 +109,14 @@ export default function Admin() {
   // 🗑 DELETE
   // =========================
   const deleteProduct = async (id: number) => {
+    const token = localStorage.getItem('token');
+
     await fetch('https://api.mudanzasellince.com/delete-product.php', {
       method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ id }),
     });
 
@@ -113,10 +127,14 @@ export default function Admin() {
   // ✏️ UPDATE
   // =========================
   const updateProduct = async () => {
+    const token = localStorage.getItem('token');
+
     await fetch('https://api.mudanzasellince.com/update-product.php', {
       method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(editing),
     });
 
@@ -127,178 +145,98 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gray-50 flex">
 
-      {/* ================= SIDEBAR ================= */}
+      {/* SIDEBAR */}
       <aside className="w-64 bg-white border-r p-6">
         <h1 className="text-xl font-bold mb-6">⚡ Admin Panel</h1>
-
-        <nav className="space-y-3 text-gray-600">
-          <p className="font-semibold text-black">📦 Productos</p>
-          <p>➕ Crear</p>
-          <p>📊 Dashboard</p>
-        </nav>
       </aside>
 
-      {/* ================= MAIN ================= */}
+      {/* MAIN */}
       <main className="flex-1 p-8">
 
-        {/* HEADER */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Productos</h2>
+        <h2 className="text-2xl font-bold mb-4">Productos</h2>
+
+        <button
+          onClick={loadProducts}
+          className="px-4 py-2 bg-black text-white rounded-lg mb-6"
+        >
+          Recargar
+        </button>
+
+        {/* CREATE */}
+        <div className="bg-white p-4 rounded shadow mb-6">
+
+          <input
+            className="border p-2 w-full mb-2"
+            placeholder="Nombre"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+
+          <input
+            className="border p-2 w-full mb-2"
+            placeholder="Categoría"
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+          />
+
+          <textarea
+            className="border p-2 w-full mb-2"
+            placeholder="Descripción"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+
+          <input
+            type="file"
+            onChange={(e) =>
+              setForm({ ...form, image: e.target.files?.[0] || null })
+            }
+          />
 
           <button
-            onClick={loadProducts}
-            className="px-4 py-2 bg-black text-white rounded-lg"
+            onClick={createProduct}
+            className="bg-blue-600 text-white px-4 py-2 mt-2"
           >
-            Recargar
+            {loading ? 'Creando...' : 'Crear'}
           </button>
         </div>
 
-        {/* ================= CREATE CARD ================= */}
-        <div className="bg-white p-6 rounded-xl shadow mb-8">
-          <h3 className="font-bold mb-4">Crear producto</h3>
-
-          <div className="grid gap-3">
-
-            <input
-              className="border p-2 rounded"
-              placeholder="Nombre"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
-
-            <input
-              className="border p-2 rounded"
-              placeholder="Categoría"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-            />
-
-            <textarea
-              className="border p-2 rounded"
-              placeholder="Descripción"
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-            />
-
-            <input
-              type="file"
-              onChange={(e) =>
-                setForm({ ...form, image: e.target.files?.[0] || null })
-              }
-            />
-
-            <button
-              onClick={createProduct}
-              className="bg-blue-600 text-white py-2 rounded-lg"
-            >
-              {loading ? 'Creando...' : 'Crear producto'}
-            </button>
-
-          </div>
-        </div>
-
-        {/* ================= EDIT ================= */}
-        {editing && (
-          <div className="bg-white p-6 rounded-xl shadow mb-8 border border-blue-500">
-            <h3 className="font-bold mb-4">Editar producto</h3>
-
-            <input
-              className="border p-2 rounded w-full mb-2"
-              value={editing.name}
-              onChange={(e) =>
-                setEditing({ ...editing, name: e.target.value })
-              }
-            />
-
-            <input
-              className="border p-2 rounded w-full mb-2"
-              value={editing.category}
-              onChange={(e) =>
-                setEditing({ ...editing, category: e.target.value })
-              }
-            />
-
-            <textarea
-              className="border p-2 rounded w-full mb-2"
-              value={editing.description}
-              onChange={(e) =>
-                setEditing({ ...editing, description: e.target.value })
-              }
-            />
-
-            <div className="flex gap-2">
-              <button
-                onClick={updateProduct}
-                className="bg-green-600 text-white px-4 py-2 rounded"
-              >
-                Guardar
-              </button>
-
-              <button
-                onClick={() => setEditing(null)}
-                className="bg-gray-300 px-4 py-2 rounded"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= GRID ================= */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* LIST */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 
           {Array.isArray(products) && products.map((p) => (
-            <div
-              key={p.id}
-              className="bg-white rounded-xl shadow overflow-hidden"
-            >
+            <div key={p.id} className="bg-white p-4 shadow rounded">
 
               {p.image && (
-                <img
-                  src={p.image}
-                  className="h-40 w-full object-cover"
-                />
+                <img src={p.image} className="h-32 w-full object-cover mb-2" />
               )}
 
-              <div className="p-4">
+              <h3 className="font-bold">{p.name}</h3>
+              <p className="text-sm text-gray-500">{p.category}</p>
+              <p className="text-sm">{p.description}</p>
 
-                <h3 className="font-bold text-lg">{p.name}</h3>
-                <p className="text-sm text-gray-500">{p.category}</p>
+              <div className="flex gap-2 mt-2">
 
-                <p className="text-sm mt-2 text-gray-700">
-                  {p.description}
-                </p>
+                <button
+                  onClick={() => setEditing(p)}
+                  className="bg-yellow-500 text-white px-2 py-1"
+                >
+                  Editar
+                </button>
 
-                <div className="flex gap-2 mt-4">
-
-                  <button
-                    onClick={() => setEditing(p)}
-                    className="px-3 py-1 bg-yellow-500 text-white rounded"
-                  >
-                    Editar
-                  </button>
-
-                  <button
-                    onClick={() => deleteProduct(p.id)}
-                    className="px-3 py-1 bg-red-500 text-white rounded"
-                  >
-                    Eliminar
-                  </button>
-
-                </div>
+                <button
+                  onClick={() => deleteProduct(p.id)}
+                  className="bg-red-500 text-white px-2 py-1"
+                >
+                  Eliminar
+                </button>
 
               </div>
+
             </div>
           ))}
 
         </div>
-
-        {/* ================= EMPTY STATE ================= */}
-        {!products.length && (
-          <div className="text-center text-gray-500 mt-10">
-            No hay productos o no hay sesión activa
-          </div>
-        )}
 
       </main>
     </div>
