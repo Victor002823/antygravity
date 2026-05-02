@@ -356,4 +356,3 @@ const ProductCard: FC<ProductCardProps> = ({ product, onRequestQuote, className 
     </article>
   );
 };
-
