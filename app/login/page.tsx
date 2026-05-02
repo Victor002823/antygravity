@@ -11,6 +11,7 @@ export default function Login() {
   const login = async () => {
     const res = await fetch('https://api.mudanzasellince.com/login.php', {
       method: 'POST',
+      credentials: 'include', // 🔥 clave SaaS real
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
@@ -18,7 +19,6 @@ export default function Login() {
     const data = await res.json();
 
     if (data.success) {
-      localStorage.setItem('admin', JSON.stringify(data.user));
       router.push('/admin');
     } else {
       alert('Credenciales incorrectas');

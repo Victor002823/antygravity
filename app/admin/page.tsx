@@ -19,42 +19,32 @@ export default function Admin() {
   const [editing, setEditing] = useState<any | null>(null);
 
   // =========================
-  // 🔐 AUTH CHECK (SAFE)
+  // 🔐 AUTH CHECK SAFE
   // =========================
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
-
-      if (!token) {
-        router.push('/login');
-      }
+      if (!token) router.push('/login');
     }
   }, []);
 
   // =========================
-  // 📦 LOAD PRODUCTS (FIXED AUTH)
+  // 📦 LOAD PRODUCTS SAFE
   // =========================
   const loadProducts = async () => {
     try {
-      const token = localStorage.getItem('token');
-
-      const res = await fetch('https://api.mudanzasellince.com/products.php', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+      const res = await fetch('https://api.mudanzasellince.com/products.php');
       const data = await res.json();
 
-      if (data?.data && Array.isArray(data.data)) {
-        setProducts(data.data);
-      } else {
-        console.error('API ERROR:', data);
+      if (!data?.success || !Array.isArray(data.data)) {
         setProducts([]);
+        console.warn('API inválida:', data);
+        return;
       }
+
+      setProducts(data.data);
     } catch (err) {
-      console.error('FETCH ERROR:', err);
+      console.error('Fetch error:', err);
       setProducts([]);
     }
   };
@@ -64,14 +54,14 @@ export default function Admin() {
   }, []);
 
   // =========================
-  // ➕ CREATE PRODUCT
+  // ➕ CREATE PRODUCT SAFE
   // =========================
   const createProduct = async () => {
     setLoading(true);
 
     try {
       const fd = new FormData();
-      fd.append('file', form.image as File);
+      if (form.image) fd.append('file', form.image);
 
       const upload = await fetch('/api/upload', {
         method: 'POST',
@@ -92,7 +82,7 @@ export default function Admin() {
           name: form.name,
           category: form.category,
           description: form.description,
-          image: uploadData.url,
+          image: uploadData?.url || '',
         }),
       });
 
@@ -106,7 +96,7 @@ export default function Admin() {
   };
 
   // =========================
-  // 🗑 DELETE
+  // 🗑 DELETE SAFE
   // =========================
   const deleteProduct = async (id: number) => {
     const token = localStorage.getItem('token');
@@ -124,7 +114,7 @@ export default function Admin() {
   };
 
   // =========================
-  // ✏️ UPDATE
+  // ✏️ UPDATE SAFE
   // =========================
   const updateProduct = async () => {
     const token = localStorage.getItem('token');
@@ -142,12 +132,20 @@ export default function Admin() {
     await loadProducts();
   };
 
+  // =========================
+  // 🧠 CRASH PROTECTION
+  // =========================
+  if (!Array.isArray(products)) {
+    return <div className="p-10">Cargando dashboard...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
 
       {/* SIDEBAR */}
       <aside className="w-64 bg-white border-r p-6">
-        <h1 className="text-xl font-bold mb-6">⚡ Admin Panel</h1>
+        <h1 className="text-xl font-bold mb-6">Admin</h1>
+        <p>Productos</p>
       </aside>
 
       {/* MAIN */}
@@ -155,87 +153,48 @@ export default function Admin() {
 
         <h2 className="text-2xl font-bold mb-4">Productos</h2>
 
-        <button
-          onClick={loadProducts}
-          className="px-4 py-2 bg-black text-white rounded-lg mb-6"
-        >
-          Recargar
-        </button>
-
         {/* CREATE */}
         <div className="bg-white p-4 rounded shadow mb-6">
-
           <input
-            className="border p-2 w-full mb-2"
             placeholder="Nombre"
+            className="border p-2 w-full mb-2"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
 
-          <input
-            className="border p-2 w-full mb-2"
-            placeholder="Categoría"
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-          />
-
-          <textarea
-            className="border p-2 w-full mb-2"
-            placeholder="Descripción"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-          />
-
-          <input
-            type="file"
-            onChange={(e) =>
-              setForm({ ...form, image: e.target.files?.[0] || null })
-            }
-          />
-
           <button
             onClick={createProduct}
-            className="bg-blue-600 text-white px-4 py-2 mt-2"
+            className="bg-blue-600 text-white px-4 py-2 rounded"
           >
             {loading ? 'Creando...' : 'Crear'}
           </button>
         </div>
 
         {/* LIST */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-          {Array.isArray(products) && products.map((p) => (
-            <div key={p.id} className="bg-white p-4 shadow rounded">
-
-              {p.image && (
-                <img src={p.image} className="h-32 w-full object-cover mb-2" />
-              )}
+        <div className="grid gap-4">
+          {products.map((p) => (
+            <div key={p.id} className="bg-white p-4 rounded shadow">
 
               <h3 className="font-bold">{p.name}</h3>
-              <p className="text-sm text-gray-500">{p.category}</p>
-              <p className="text-sm">{p.description}</p>
+              <p>{p.category}</p>
 
               <div className="flex gap-2 mt-2">
-
                 <button
                   onClick={() => setEditing(p)}
-                  className="bg-yellow-500 text-white px-2 py-1"
+                  className="bg-yellow-500 text-white px-2 py-1 rounded"
                 >
                   Editar
                 </button>
 
                 <button
                   onClick={() => deleteProduct(p.id)}
-                  className="bg-red-500 text-white px-2 py-1"
+                  className="bg-red-500 text-white px-2 py-1 rounded"
                 >
                   Eliminar
                 </button>
-
               </div>
-
             </div>
           ))}
-
         </div>
 
       </main>
