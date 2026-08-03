@@ -1,10 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  swcMinify: false,
+  experimental: {
+    workerThreads: false,
+    cpus: 1,
+  },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'pub-49eda2722f8e480d9a3801c4aa48e1d1.r2.dev',
+        hostname: 'pub-23557c39f90d46d584f7e9b28f7dff3b.r2.dev',
         pathname: '/**',
       },
     ],
