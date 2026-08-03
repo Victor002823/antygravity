@@ -9,19 +9,24 @@ export default function Login() {
   const router = useRouter();
 
   const login = async () => {
-    const res = await fetch('https://api.mudanzasellince.com/login.php', {
-      method: 'POST',
-      credentials: 'include', // 🔥 clave SaaS real
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch('https://api.mudanzasellince.com/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      router.push('/admin');
-    } else {
-      alert('Credenciales incorrectas');
+      if (data.success) {
+        if (data.token) localStorage.setItem('token', data.token);
+        router.push('/admin');
+      } else {
+        alert(data.message || 'Credenciales incorrectas');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error de conexión con el servidor');
     }
   };
 

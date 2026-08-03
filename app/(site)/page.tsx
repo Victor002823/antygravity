@@ -17,7 +17,7 @@ export default function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-dark/90 to-dark/40" />
         </div>
-        
+
         <div className="container relative z-10 mx-auto px-4 md:px-8 max-w-7xl">
           <div className="max-w-3xl">
             <span className="inline-block py-1 px-3 rounded-full bg-primary/20 text-secondary border border-secondary/30 text-sm font-semibold mb-6 tracking-wide uppercase">
@@ -54,16 +54,16 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display text-gray-800">¿Por qué elegir Elite Titan Culinary?</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">Más que proveedores, somos socios estratégicos en el crecimiento de tu planta procesadora.</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                 <ShieldCheck size={32} />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">Garantía Elite</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Todos nuestros equipos cuentan con póliza de garantía directa de hasta 1 años por defectos de fábrica.</p>
+              <p className="text-gray-500 text-sm leading-relaxed">Todos nuestros equipos cuentan con póliza de garantía directa de hasta 1 año por defectos de fábrica.</p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                 <Wrench size={32} />
@@ -71,7 +71,7 @@ export default function Home() {
               <h3 className="text-xl font-semibold mb-3 text-gray-800">Soporte Técnico 24/7</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Equipo de ingenieros especializados disponibles para mantenimiento preventivo y correctivo inmediato.</p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                 <Truck size={32} />
@@ -79,7 +79,7 @@ export default function Home() {
               <h3 className="text-xl font-semibold mb-3 text-gray-800">Envío Nacional Seguro</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Logística especializada para transportar maquinaria pesada a cualquier punto del país con seguro incluido.</p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                 <Award size={32} />
@@ -103,7 +103,7 @@ export default function Home() {
               Ver todo el catálogo <ArrowRight size={16} />
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -134,7 +134,7 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/30 to-transparent z-10"></div>
                 <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/10 transition-colors z-20"></div>
-                
+
                 <div className="absolute bottom-0 left-0 w-full p-8 z-30 transform translate-y-4 group-hover:translate-y-0 transition-transform">
                   <h3 className="text-2xl font-bold text-white mb-2">{cat.title}</h3>
                   <p className="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity delay-100">{cat.desc}</p>
