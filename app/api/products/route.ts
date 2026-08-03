@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getTokenFromRequest, verifyToken } from '@/lib/auth';
+
+function requireAuth(req: Request) {
+  const token = getTokenFromRequest(req);
+  if (!token) return null;
+  return verifyToken(token);
+}
 
 export async function GET() {
   try {
@@ -11,6 +18,11 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const user = requireAuth(req);
+  if (!user) {
+    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const newProduct = await prisma.product.create({
@@ -28,6 +40,11 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const user = requireAuth(req);
+  if (!user) {
+    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const updated = await prisma.product.update({
@@ -46,6 +63,11 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const user = requireAuth(req);
+  if (!user) {
+    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { getTokenFromRequest, verifyToken } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 
@@ -13,6 +14,12 @@ const s3 = new S3Client({
 });
 
 export async function POST(req: Request) {
+  const token = getTokenFromRequest(req);
+  const user = token ? verifyToken(token) : null;
+  if (!user) {
+    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+  }
+
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;

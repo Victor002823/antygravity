@@ -1,15 +1,19 @@
 import { NextResponse } from 'next/server';
+import { signToken } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    // MOCK AUTH: In a real app, check against a database
-    if (email === 'admin@test.com' && password === '123456') {
+    const validEmail = process.env.ADMIN_EMAIL;
+    const validPassword = process.env.ADMIN_PASSWORD;
+
+    if (email === validEmail && password === validPassword) {
+      const token = signToken({ email });
       return NextResponse.json({
         success: true,
-        token: 'mock-jwt-token-' + Date.now(),
-        user: { name: 'Admin Antigravity', email }
+        token,
+        user: { name: 'Admin Antigravity', email },
       });
     }
 
