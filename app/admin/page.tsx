@@ -57,11 +57,13 @@ export default function Admin() {
 
     setUploading(true);
     try {
+      const token = localStorage.getItem('token');
       const formData = new FormData();
       formData.append('file', file);
 
       const res = await fetch('/api/upload', {
         method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
 
