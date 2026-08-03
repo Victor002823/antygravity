@@ -71,23 +71,27 @@ export default async function Catalogo({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map(product => (
               <article key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100 group">
-                <div className="h-64 w-full relative bg-gray-100 overflow-hidden">
-                  <Image
-                    src={product.imageUrl}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark/20 backdrop-blur-sm">
-                    <span className="bg-white text-dark px-4 py-2 rounded-full font-medium text-sm">Ver Detalles</span>
+                <Link href={`/catalogo/${product.id}`}>
+                  <div className="h-64 w-full relative bg-gray-100 overflow-hidden">
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark/20 backdrop-blur-sm">
+                      <span className="bg-white text-dark px-4 py-2 rounded-full font-medium text-sm">Ver Detalles</span>
+                    </div>
                   </div>
-                </div>
+                </Link>
                 <div className="p-6 text-left">
                   <span className="text-xs font-bold uppercase tracking-wider text-primary mb-2 block">
                     {categories.find(c => c.id === product.category)?.name}
                   </span>
-                  <h3 className="font-bold text-xl text-gray-800 mb-2">{product.name}</h3>
+                  <Link href={`/catalogo/${product.id}`}>
+                    <h3 className="font-bold text-xl text-gray-800 mb-2 hover:text-primary transition-colors">{product.name}</h3>
+                  </Link>
                   <p className="text-gray-500 text-sm mb-6 line-clamp-2">{product.description}</p>
 
                   <Link href={`/contacto?product=${product.id}`} className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all w-full justify-between group-hover:text-secondary">
