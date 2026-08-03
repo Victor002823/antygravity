@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { Filter, ArrowRight } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Catálogo de Equipos | Antigravity',
   description: 'Explora nuestro catálogo de maquinaria industrial para procesamiento de alimentos.',
