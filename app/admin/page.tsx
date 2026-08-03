@@ -8,24 +8,22 @@ export default function Admin() {
 
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const [form, setForm] = useState({
     name: '',
     category: '',
     description: '',
-    // Si usas un input file, mantenemos image, si es URL, usa string
     imageUrl: '',
   });
 
   const [editing, setEditing] = useState<any | null>(null);
 
-  // 🔐 AUTH SAFE
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) router.push('/login');
   }, [router]);
 
-  // 📦 LEER PRODUCTOS (GET)
   const loadProducts = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -34,9 +32,7 @@ export default function Admin() {
       setLoading(true);
 
       const res = await fetch('/api/products', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
@@ -55,19 +51,42 @@ export default function Admin() {
     }
   };
 
-  // ➕/✏️ CREAR O EDITAR PRODUCTO (POST / PUT)
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setForm((prev) => ({ ...prev, imageUrl: data.url }));
+      } else {
+        alert('Error al subir imagen: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Error de conexión al subir la imagen');
+    }
+    setUploading(false);
+  };
+
   const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
       const isEditing = !!editing;
 
-      // Si estas usando '/api/create-product' puedes cambiar la URL aquí para el POST
-      const url = isEditing ? '/api/products' : '/api/products';
-      const method = isEditing ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method: method,
+      const res = await fetch('/api/products', {
+        method: isEditing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -78,8 +97,8 @@ export default function Admin() {
       const data = await res.json();
 
       if (data.success) {
-        loadProducts(); // Recargar la lista
-        setForm({ name: '', category: '', description: '', imageUrl: '' }); // Limpiar
+        loadProducts();
+        setForm({ name: '', category: '', description: '', imageUrl: '' });
         setEditing(null);
         alert(isEditing ? 'Producto actualizado' : 'Producto creado');
       } else {
@@ -90,7 +109,6 @@ export default function Admin() {
     }
   };
 
-  // 🗑️ BORRAR PRODUCTO (DELETE)
   const handleDeleteProduct = async (id: string) => {
     if (!confirm('¿Estás seguro de que deseas eliminar este equipo?')) return;
 
@@ -98,15 +116,13 @@ export default function Admin() {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/products?id=${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
 
       if (data.success) {
-        loadProducts(); // Recargar lista tras borrar
+        loadProducts();
       } else {
         alert('Error al borrar: ' + data.error);
       }
@@ -115,7 +131,6 @@ export default function Admin() {
     }
   };
 
-  // Cargar info en el formulario para editar
   const handleEditClick = (product: any) => {
     setEditing(product);
     setForm({
@@ -146,7 +161,6 @@ export default function Admin() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Formulario */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit">
           <h2 className="text-2xl font-bold mb-6">{editing ? 'Editar Equipo' : 'Nuevo Equipo'}</h2>
           <form onSubmit={handleSaveProduct} className="flex flex-col gap-4">
@@ -176,19 +190,29 @@ export default function Admin() {
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required
             />
-            {/* Por ahora un campo de texto para la URL de la imagen. Si usas subida de archivos, se cambia a input type="file" */}
-            <input
-              type="text"
-              placeholder="URL de la imagen (/images/products/...)"
-              className="p-3 border border-gray-200 rounded-lg outline-none focus:border-primary"
-              value={form.imageUrl}
-              onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-            />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">Imagen del equipo</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={uploading}
+                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary file:font-medium hover:file:bg-primary/20"
+              />
+              {uploading && <p className="text-sm text-primary mt-2">Subiendo imagen...</p>}
+              {form.imageUrl && !uploading && (
+                <div className="mt-3 w-24 h-24 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                  <img src={form.imageUrl} alt="Vista previa" className="w-full h-full object-contain p-1" />
+                </div>
+              )}
+            </div>
 
             <div className="flex gap-2 mt-4">
               <button
                 type="submit"
-                className="flex-1 bg-primary text-white p-3 rounded-lg font-bold hover:bg-primary/90 transition"
+                disabled={uploading || !form.imageUrl}
+                className="flex-1 bg-primary text-white p-3 rounded-lg font-bold hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {editing ? 'Guardar Cambios' : 'Agregar Equipo'}
               </button>
@@ -205,7 +229,6 @@ export default function Admin() {
           </form>
         </div>
 
-        {/* Lista de Productos */}
         <div className="lg:col-span-2">
           {loading ? (
             <div className="flex justify-center py-20">
