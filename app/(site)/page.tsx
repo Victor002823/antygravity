@@ -174,12 +174,12 @@ export default function Home() {
       {/* Trust Badges */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="container mx-auto px-4 md:px-8 max-w-7xl text-center">
-          <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-8">Empresas que confían en nuestra tecnología</p>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-50 grayscale">
-            {/* Placeholders for logos */}
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="text-2xl font-bold font-display text-gray-400">BRAND {i}</div>
-            ))}
+          <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-8">Trabajamos con las marcas de vanguardia del mercado</p>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-70 grayscale hover:grayscale-0 transition-all">
+            <img src="/images/brands/migsa.png" alt="Migsa" className="h-10 md:h-12 object-contain" />
+            <img src="/images/brands/sanitary-metal.png" alt="Sanitary Metal" className="h-10 md:h-12 object-contain" />
+            <img src="/images/brands/frio-taurinox.png" alt="Frío Taurinox" className="h-10 md:h-12 object-contain" />
+            <img src="/images/brands/frio-cima.png" alt="Frío Cima" className="h-10 md:h-12 object-contain" />
           </div>
         </div>
       </section>
