@@ -15,9 +15,31 @@ const categories: Record<string, string> = {
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const product = await prisma.product.findUnique({ where: { id: params.id } });
   if (!product) return { title: 'Producto no encontrado | Antigravity' };
+
+  const description = product.description.slice(0, 150);
+
   return {
     title: `${product.name} | Antigravity`,
-    description: product.description.slice(0, 150),
+    description,
+    openGraph: {
+      title: product.name,
+      description,
+      images: [
+        {
+          url: product.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: product.name,
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description,
+      images: [product.imageUrl],
+    },
   };
 }
 
