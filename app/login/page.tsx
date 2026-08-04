@@ -31,23 +31,45 @@ export default function Login() {
   };
 
   return (
-    <div style={{ padding: 50 }}>
-      <h1>Login Admin</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
+        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Login Admin
+        </h1>
 
-      <input
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
+              placeholder="admin@ejemplo.com"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
+              placeholder="••••••••"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-      <button onClick={login}>
-        Entrar
-      </button>
+          <button
+            className="w-full bg-black text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-800 transition duration-200 mt-2"
+            onClick={login}
+          >
+            Entrar
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
