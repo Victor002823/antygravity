@@ -10,6 +10,7 @@ export default function Admin() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploading2, setUploading2] = useState(false);
   const [search, setSearch] = useState('');
 
   const [form, setForm] = useState({
@@ -17,6 +18,7 @@ export default function Admin() {
     category: '',
     description: '',
     imageUrl: '',
+    imageUrl2: '',
   });
 
   const [editing, setEditing] = useState<any | null>(null);
@@ -63,34 +65,39 @@ export default function Admin() {
     );
   }, [products, search]);
 
+  const uploadFile = async (file: File): Promise<string | null> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (data.success) return data.url;
+    alert('Error al subir imagen: ' + data.error);
+    return null;
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploading(true);
-    try {
-      const token = localStorage.getItem('token');
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        setForm((prev) => ({ ...prev, imageUrl: data.url }));
-      } else {
-        alert('Error al subir imagen: ' + data.error);
-      }
-    } catch (error) {
-      console.error('Upload error:', error);
-      alert('Error de conexión al subir la imagen');
-    }
+    const url = await uploadFile(file);
+    if (url) setForm((prev) => ({ ...prev, imageUrl: url }));
     setUploading(false);
+  };
+
+  const handleImageUpload2 = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading2(true);
+    const url = await uploadFile(file);
+    if (url) setForm((prev) => ({ ...prev, imageUrl2: url }));
+    setUploading2(false);
   };
 
   const handleSaveProduct = async (e: React.FormEvent) => {
@@ -112,7 +119,7 @@ export default function Admin() {
 
       if (data.success) {
         loadProducts();
-        setForm({ name: '', category: '', description: '', imageUrl: '' });
+        setForm({ name: '', category: '', description: '', imageUrl: '', imageUrl2: '' });
         setEditing(null);
         alert(isEditing ? 'Producto actualizado' : 'Producto creado');
       } else {
@@ -152,6 +159,7 @@ export default function Admin() {
       category: product.category,
       description: product.description || product.desc || '',
       imageUrl: product.imageUrl || product.img || '',
+      imageUrl2: product.imageUrl2 || '',
     });
   };
 
@@ -206,7 +214,7 @@ export default function Admin() {
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">Imagen del equipo</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">Imagen principal</label>
               <input
                 type="file"
                 accept="image/*"
@@ -222,10 +230,36 @@ export default function Admin() {
               )}
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">Segunda imagen (opcional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload2}
+                disabled={uploading2}
+                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary file:font-medium hover:file:bg-primary/20"
+              />
+              {uploading2 && <p className="text-sm text-primary mt-2">Subiendo imagen...</p>}
+              {form.imageUrl2 && !uploading2 && (
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="w-24 h-24 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                    <img src={form.imageUrl2} alt="Vista previa 2" className="w-full h-full object-contain p-1" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setForm((prev) => ({ ...prev, imageUrl2: '' }))}
+                    className="text-xs text-error hover:underline"
+                  >
+                    Quitar
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="flex gap-2 mt-4">
               <button
                 type="submit"
-                disabled={uploading || !form.imageUrl}
+                disabled={uploading || uploading2 || !form.imageUrl}
                 className="flex-1 bg-primary text-white p-3 rounded-lg font-bold hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {editing ? 'Guardar Cambios' : 'Agregar Equipo'}
@@ -233,7 +267,7 @@ export default function Admin() {
               {editing && (
                 <button
                   type="button"
-                  onClick={() => { setEditing(null); setForm({ name: '', category: '', description: '', imageUrl: '' }); }}
+                  onClick={() => { setEditing(null); setForm({ name: '', category: '', description: '', imageUrl: '', imageUrl2: '' }); }}
                   className="bg-gray-200 text-gray-700 p-3 rounded-lg font-bold hover:bg-gray-300 transition"
                 >
                   Cancelar
@@ -276,6 +310,11 @@ export default function Admin() {
                       <span className="text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 px-2 py-1 rounded">
                         {product.category}
                       </span>
+                      {product.imageUrl2 && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded">
+                          2 fotos
+                        </span>
+                      )}
                     </div>
                     <p className="text-gray-500 text-sm line-clamp-1">{product.description || product.desc}</p>
                   </div>

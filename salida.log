@@ -1,0 +1,52 @@
+nohup: ignoring input
+Productos a importar: 584
+(node:28276) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  25 creados...
+  50 creados...
+  75 creados...
+  100 creados...
+  125 creados...
+  150 creados...
+  Sin imagen local para: Vitrina caliente de 2 niveles de doble exhibición  Migsa Modelo HW-6P
+  Sin imagen local para: Vitrina refrigerada para ensaladas y pizzas sobre mesa Migsa Modelo RT-1200L
+  Sin imagen local para: Vitrina refrigerada cristal curvo  Migsa Modelo RTW-100L
+  175 creados...
+  200 creados...
+  225 creados...
+
+Listo.
+  Creados: 237
+  Saltados: 347
+  Errores: 0
+  Por categoria: { procesamiento: 205, empaque: 7, refrigeracion: 25 }
+
+  205 cayeron en 'procesamiento' por defecto.
+  Muestra: [
+  'Llave mezcladora de 12" cuello
+Listo.
+  Creados: 576
+  Saltados: 8
+  Errores: 0
+  Por categoria: { refrigeracion: 121, procesamiento: 442, empaque: 13 }
+
+  442 cayeron en 'procesamiento' por defecto.
+  Muestra: [
+  'Wafflera Belga Eléctrica Industrial 110V de Cuadros Profundos con Teflón Migsa Essential WBME-2',
+  'Wafflera Americana Eléctrica Redonda Industrial 110V con Teflón Antiadherente Migsa Essential WAME-1',
+  'Despachador de Bebidas Frías y Aguas Frescas de 50 Litros Eléctrico 110V Migsa Essential JDME-50L',
+  'Plancha Panini Grill Eléctrica de Doble Cabezal Industrial 110V Acanalada Migsa Essential PPME-3',
+  'Plancha Panini Grill Eléctrica Industrial 120V Doble Acanalada en Acero Inoxidable Migsa Essential PPME-2',
+  'Plancha Panini Grill Eléctrica Industrial 120V Acanalada de Acero Inoxidable con Temporizador Migsa Essential PPME-1',
+  'Crepera Essential 40cm 1,700W 110V Migsa CME-1',
+  'Cámara de Fermentación Digital 12 Charolas Extra Grandes (60 x 46 cm) MIGSA FDM-860',
+  'Horno de Convección Digital 66 Litros MIGSA HDM-600',
+  'Horno de Convección Digital 66 Litros (220V) MIGSA HDM-600/220'
+]

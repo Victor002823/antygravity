@@ -31,6 +31,7 @@ export async function POST(req: Request) {
         category: body.category,
         description: body.description,
         imageUrl: body.imageUrl,
+        imageUrl2: body.imageUrl2 || null,
       },
     });
     return NextResponse.json({ success: true, data: newProduct });
@@ -54,6 +55,7 @@ export async function PUT(req: Request) {
         category: body.category,
         description: body.description,
         imageUrl: body.imageUrl,
+        imageUrl2: body.imageUrl2 || null,
       },
     });
     return NextResponse.json({ success: true, data: updated });
