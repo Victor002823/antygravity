@@ -180,6 +180,7 @@ export default function Home() {
             <img src="/images/brands/sanitary-metal.png" alt="Sanitary Metal" className="h-10 md:h-12 object-contain" />
             <img src="/images/brands/frio-taurinox.png" alt="Frío Taurinox" className="h-10 md:h-12 object-contain" />
             <img src="/images/brands/frio-cima.png" alt="Frío Cima" className="h-10 md:h-12 object-contain" />
+            <img src="/images/brands/Metal_frio.png" alt="Metalfrio" className="h-10 md:h-12 object-contain" />
           </div>
         </div>
       </section>
