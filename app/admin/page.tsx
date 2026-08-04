@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { Search } from 'lucide-react';
 
 export default function Admin() {
   const router = useRouter();
@@ -9,6 +10,7 @@ export default function Admin() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [search, setSearch] = useState('');
 
   const [form, setForm] = useState({
     name: '',
@@ -50,6 +52,16 @@ export default function Admin() {
       setLoading(false);
     }
   };
+
+  const filteredProducts = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return products;
+    return products.filter((p) =>
+      p.name?.toLowerCase().includes(term) ||
+      p.category?.toLowerCase().includes(term) ||
+      p.description?.toLowerCase().includes(term)
+    );
+  }, [products, search]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -232,13 +244,24 @@ export default function Admin() {
         </div>
 
         <div className="lg:col-span-2">
+          <div className="relative mb-4">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar por nombre, categoría o descripción..."
+              className="w-full pl-11 pr-4 py-3 rounded-full border border-gray-200 bg-white text-sm outline-none focus:border-primary transition-colors"
+            />
+          </div>
+
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <div key={product.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
                   <div className="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0">
                     <img
@@ -275,9 +298,11 @@ export default function Admin() {
                 </div>
               ))}
 
-              {products.length === 0 && (
+              {filteredProducts.length === 0 && (
                 <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-                  <p className="text-gray-500">No hay productos registrados en el sistema.</p>
+                  <p className="text-gray-500">
+                    {search ? `No hay resultados para "${search}".` : 'No hay productos registrados en el sistema.'}
+                  </p>
                 </div>
               )}
             </div>

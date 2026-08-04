@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Filter, ArrowRight } from 'lucide-react';
+import { Filter, ArrowRight, Search } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
@@ -20,14 +20,23 @@ const categories = [
 export default async function Catalogo({
   searchParams,
 }: {
-  searchParams: { category?: string }
+  searchParams: { category?: string; q?: string }
 }) {
   const currentCategory = searchParams.category || 'todos';
+  const query = searchParams.q?.trim() || '';
 
   const products = await prisma.product.findMany({
     where: {
       active: true,
       ...(currentCategory !== 'todos' ? { category: currentCategory } : {}),
+      ...(query
+        ? {
+            OR: [
+              { name: { contains: query, mode: 'insensitive' } },
+              { description: { contains: query, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
     },
     orderBy: { createdAt: 'desc' },
   });
@@ -46,6 +55,22 @@ export default async function Catalogo({
       <section className="py-12 bg-gray-50 min-h-screen">
         <div className="container mx-auto px-4 md:px-8 max-w-7xl">
 
+          <div className="mb-6">
+            <form method="get" className="relative max-w-xl">
+              {currentCategory !== 'todos' && (
+                <input type="hidden" name="category" value={currentCategory} />
+              )}
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                name="q"
+                defaultValue={query}
+                placeholder="Buscar equipo por nombre o descripción..."
+                className="w-full pl-11 pr-4 py-3 rounded-full border border-gray-200 bg-white text-sm focus:outline-none focus:border-primary transition-colors"
+              />
+            </form>
+          </div>
+
           <div className="mb-10 flex flex-col md:flex-row gap-4 items-center justify-between border-b border-gray-200 pb-6">
             <div className="flex items-center gap-2 text-gray-500 font-medium">
               <Filter size={20} /> Filtrar por categoría:
@@ -54,7 +79,11 @@ export default async function Catalogo({
               {categories.map(cat => (
                 <Link
                   key={cat.id}
-                  href={cat.id === 'todos' ? '/catalogo' : `/catalogo?category=${cat.id}`}
+                  href={
+                    cat.id === 'todos'
+                      ? (query ? `/catalogo?q=${encodeURIComponent(query)}` : '/catalogo')
+                      : `/catalogo?category=${cat.id}${query ? `&q=${encodeURIComponent(query)}` : ''}`
+                  }
                   aria-current={currentCategory === cat.id ? 'page' : undefined}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     currentCategory === cat.id
@@ -104,7 +133,7 @@ export default async function Catalogo({
 
           {products.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-gray-500 text-lg">No se encontraron productos en esta categoría.</p>
+              <p className="text-gray-500 text-lg">No se encontraron productos{query ? ` para "${query}"` : ' en esta categoría'}.</p>
               <Link href="/catalogo" className="text-primary mt-4 inline-block font-medium hover:underline">
                 Ver todos los productos
               </Link>
