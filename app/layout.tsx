@@ -3,8 +3,13 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 export const metadata = {
-  title: "Antygravity App",
-  description: "Desarrollo local en Termux",
+  title: "Elite Titan Culinary",
+  description: "Maquinaria industrial para procesamiento de alimentos.",
+  icons: {
+    icon: "/images/logo.png",
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({
