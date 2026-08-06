@@ -17,7 +17,7 @@ export default function Nosotros() {
               Nuestra <span className="text-primary">Historia</span>
             </h1>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              Fundada con la visión de modernizar la industria alimentaria, Antigravity comenzó como una pequeña distribuidora de equipos básicos. Hoy, nos enorgullece ser un referente nacional en la provisión de maquinaria de procesamiento industrial de alta tecnología. 
+              Fundada con la visión de modernizar la industria alimentaria, Elite Titan Culinary comenzó como una pequeña distribuidora de equipos básicos. Hoy, nos enorgullece ser un referente nacional en la provisión de maquinaria de procesamiento industrial de alta tecnología. 
               <br/><br/>
               Nuestro compromiso siempre ha sido el mismo: empoderar a los productores de alimentos con herramientas que optimicen su eficiencia, garanticen la calidad y cumplan con los más altos estándares de inocuidad.
             </p>
@@ -84,7 +84,7 @@ export default function Nosotros() {
         <div className="container mx-auto px-4 md:px-8 max-w-7xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2 font-display">15+</div>
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2 font-display">12+</div>
               <div className="text-gray-400 text-sm md:text-base uppercase tracking-wider">Años de Experiencia</div>
             </div>
             <div>
@@ -95,36 +95,12 @@ export default function Nosotros() {
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2 font-display">300+</div>
               <div className="text-gray-400 text-sm md:text-base uppercase tracking-wider">Clientes Satisfechos</div>
             </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-secondary mb-2 font-display">12</div>
-              <div className="text-gray-400 text-sm md:text-base uppercase tracking-wider">Países con Operación</div>
-            </div>
+            
           </div>
         </div>
       </section>
 
-      {/* Equipo (Placeholder) */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 md:px-8 max-w-7xl text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 font-display">Conoce a Nuestro Equipo</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-16">
-            Detrás de cada equipo instalado hay un grupo de ingenieros, técnicos y asesores comerciales comprometidos con tu éxito.
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                <div className="h-64 bg-gray-200 w-full object-cover"></div>
-                <div className="p-6 text-left">
-                  <h3 className="font-bold text-lg text-gray-800">Nombre del Directivo</h3>
-                  <p className="text-primary text-sm font-medium mb-3">Cargo o Posición</p>
-                  <p className="text-gray-500 text-sm line-clamp-3">Breve descripción de la experiencia y rol del miembro del equipo dentro de la organización.</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
     </>
   );
 }

@@ -140,7 +140,7 @@ export default function Navbar() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 font-medium">Llámanos ahora</p>
-                    <p className="text-sm font-bold text-gray-800">+52 (55) 1234-5678</p>
+                    <p className="text-sm font-bold text-gray-800">+52 (55) 0000-0000</p>
                   </div>
                 </div>
                 <Link 

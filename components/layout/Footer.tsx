@@ -90,19 +90,19 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-primary mt-0.5 shrink-0" />
                 <span className="text-gray-400 text-sm">
-                  Av. Industrial 123, Parque Tecnológico, Ciudad de México
+                  55790 Nextlalpan, Méx.
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-primary shrink-0" />
                 <span className="text-gray-400 text-sm">
-                  +52 (55) 1234-5678
+                  +52 (55) 0000-0000
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={18} className="text-primary shrink-0" />
                 <span className="text-gray-400 text-sm">
-                  ventas@antigravity.com
+                  ventas@titanculinari.com
                 </span>
               </li>
             </ul>

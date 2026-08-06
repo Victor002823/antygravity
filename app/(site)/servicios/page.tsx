@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Settings, Wrench, GraduationCap, ShieldAlert, ArrowRight, HelpCircle } from 'lucide-react';
 
 export const metadata = {
-  title: 'Servicios | Antigravity',
+  title: 'Servicios | Elite Titan Culinary',
   description: 'Nuestros servicios de instalación, mantenimiento, y soporte técnico.',
 };
 
@@ -20,7 +20,7 @@ const services = [
   {
     icon: <GraduationCap size={40} className="text-primary" />,
     title: 'Capacitación de Operadores',
-    desc: 'Entrenamiento teórico y práctico in situ para tu personal, garantizando un uso seguro, eficiente y que prolongue la vida útil de la maquinaria.'
+    desc: 'Entrenamiento teórico y práctico para tu personal, garantizando un uso seguro, eficiente y que prolongue la vida útil de la maquinaria.'
   },
   {
     icon: <ShieldAlert size={40} className="text-secondary" />,
@@ -30,7 +30,7 @@ const services = [
 ];
 
 const faqs = [
-  { q: '¿Tienen cobertura técnica a nivel nacional?', a: 'Sí, contamos con una red de ingenieros de servicio que pueden trasladarse a cualquier punto del país en un máximo de 48 horas para emergencias.' },
+  { q: '¿Tienen cobertura técnica a nivel nacional?', a: 'Sí, contamos con una red de tecnicos de servicio que pueden trasladarse a cualquier punto del país.' },
   { q: '¿Los equipos incluyen instalación?', a: 'La mayoría de nuestros equipos industriales incluyen el servicio de puesta en marcha estándar. Para proyectos complejos o llave en mano, se cotiza la instalación de tuberías, cableado o modificaciones a la planta por separado.' },
   { q: '¿Qué incluye la póliza de mantenimiento?', a: 'Nuestras pólizas anuales incluyen visitas programadas, revisión de puntos críticos, lubricación, ajuste de componentes mecánicos, actualización de software (si aplica) y reporte técnico de estado.' },
   { q: '¿Es posible solicitar refacciones si el equipo no está en garantía?', a: 'Absolutamente. Ofrecemos venta directa de refacciones originales para todos los equipos de nuestro catálogo, independientemente del estatus de su garantía.' }
@@ -47,7 +47,7 @@ export default function Servicios() {
               Nuestros <span className="text-secondary">Servicios</span>
             </h1>
             <p className="text-lg text-gray-600 leading-relaxed">
-              La venta del equipo es solo el inicio de nuestra relación. En Antigravity contamos con un departamento técnico especializado para garantizar que tu inversión rinda al máximo durante toda su vida útil.
+              La venta del equipo es solo el inicio de nuestra relación. En Elite Titan Culinary contamos con un departamento técnico especializado para garantizar que tu inversión rinda al máximo durante toda su vida útil.
             </p>
           </div>
         </div>

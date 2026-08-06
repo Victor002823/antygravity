@@ -2,7 +2,7 @@ import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import ContactForm from '@/components/sections/ContactForm';
 
 export const metadata = {
-  title: 'Contacto | Antigravity',
+  title: 'Contacto | Elite Titan Culinary',
   description: 'Contáctanos para cotizaciones, soporte técnico o información general.',
 };
 
@@ -35,9 +35,7 @@ export default function Contacto() {
                     <div>
                       <h4 className="font-bold text-gray-800 mb-1">Dirección</h4>
                       <p className="text-gray-600 text-sm leading-relaxed">
-                        Av. Industrial 123, Nave 4.<br />
-                        Parque Tecnológico Industrial,<br />
-                        Ciudad de México, CP 01234
+                        55790 Nextlalpan, Méx.
                       </p>
                     </div>
                   </li>
@@ -48,8 +46,8 @@ export default function Contacto() {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-800 mb-1">Teléfonos</h4>
-                      <p className="text-gray-600 text-sm mb-1">Ventas: +52 (55) 1234-5678</p>
-                      <p className="text-gray-600 text-sm">Soporte: +52 (55) 8765-4321</p>
+                      <p className="text-gray-600 text-sm mb-1">Ventas: +52 (55) 0000-0000</p>
+                      <p className="text-gray-600 text-sm">Soporte: +52 (55) 0000-0000</p>
                     </div>
                   </li>
                   
@@ -59,8 +57,8 @@ export default function Contacto() {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-800 mb-1">Correo Electrónico</h4>
-                      <p className="text-gray-600 text-sm mb-1">ventas@antigravity.com</p>
-                      <p className="text-gray-600 text-sm">soporte@antigravity.com</p>
+                      <p className="text-gray-600 text-sm mb-1">ventas@titanculinari.com</p>
+                      <p className="text-gray-600 text-sm">soporte@titanculinari.com</p>
                     </div>
                   </li>
                   
@@ -70,8 +68,8 @@ export default function Contacto() {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-800 mb-1">Horario de Atención</h4>
-                      <p className="text-gray-600 text-sm mb-1">Lunes a Viernes: 8:00 AM - 6:00 PM</p>
-                      <p className="text-gray-600 text-sm">Sábados: 9:00 AM - 1:00 PM</p>
+                      <p className="text-gray-600 text-sm mb-1">Lunes a Viernes: 10:00 AM - 5:00 PM</p>
+                      <p className="text-gray-600 text-sm">Sábados: 10:00 AM - 2:00 PM</p>
                     </div>
                   </li>
                 </ul>

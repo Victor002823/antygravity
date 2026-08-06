@@ -68,8 +68,8 @@ export default function Home() {
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                 <Wrench size={32} />
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-800">Soporte Técnico 24/7</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Equipo de ingenieros especializados disponibles para mantenimiento preventivo y correctivo inmediato.</p>
+              <h3 className="text-xl font-semibold mb-3 text-gray-800">Soporte Técnico</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Equipo de tecnicos especializados disponibles para mantenimiento preventivo y correctivo inmediato.</p>
             </div>
 
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
@@ -77,7 +77,7 @@ export default function Home() {
                 <Truck size={32} />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">Envío Nacional Seguro</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Logística especializada para transportar maquinaria pesada a cualquier punto del país con seguro incluido.</p>
+              <p className="text-gray-500 text-sm leading-relaxed">Logística especializada para transportar maquinaria pesada a cualquier punto del país.</p>
             </div>
 
             <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-gray-100">
@@ -85,7 +85,7 @@ export default function Home() {
                 <Award size={32} />
               </div>
               <h3 className="text-xl font-semibold mb-3 text-gray-800">Certificaciones</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Equipos que cumplen con normas internacionales ISO, FDA y CE para garantizar la inocuidad.</p>
+              <p className="text-gray-500 text-sm leading-relaxed">Equipos que cumplen con normas internacionales para garantizar la inocuidad.</p>
             </div>
           </div>
         </div>
